@@ -1,0 +1,5 @@
+Stanze: N10, Biblioteca, N11
+Inizio: N10
+Vincente: N11
+Attrezzi: Osso 1 Biblioteca
+Uscite: N10 est Biblioteca Biblioteca sud N11

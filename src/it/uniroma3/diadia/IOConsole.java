@@ -6,6 +6,12 @@ import java.util.Scanner;
  * Implementazione dell'interfaccia IO che interagisce con la console standard.
  */
 public class IOConsole implements IO {
+	
+	private Scanner scanner;
+	
+	public IOConsole(Scanner scanner) {
+		this.scanner = scanner;
+	}
 
     @Override
     public void mostraMessaggio(String msg) {
@@ -14,8 +20,6 @@ public class IOConsole implements IO {
 
     @Override
     public String leggiRiga() {
-        Scanner scannerDiLinee = new Scanner(System.in);
-        // Non chiudiamo lo scanner qui altrimenti chiuderemmo System.in
-        return scannerDiLinee.nextLine();
+        return scanner.nextLine();
     }
 }

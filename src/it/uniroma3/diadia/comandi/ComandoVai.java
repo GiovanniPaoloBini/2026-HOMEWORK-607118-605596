@@ -1,48 +1,50 @@
 package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.ambienti.Direzione;
 import it.uniroma3.diadia.ambienti.Stanza;
-import it.uniroma3.diadia.IO;
 
-public class ComandoVai implements Comando {
-    private String direzione;
-    private final static String NOME = "vai";
-    private IO io;
+public class ComandoVai extends AbstractComando {
+
+    static {
+    	segnaComando("vai");
+    }
     
     @Override
     public void esegui(Partita partita) {
-        // Supponendo che tu abbia aggiunto un campo privato 'io' alla classe
-        if (this.direzione == null) {
-            this.io.mostraMessaggio("Dove vuoi andare?"); 
+
+        String param = this.getParametro();
+
+        if (param == null) {
+            io.mostraMessaggio("Dove vuoi andare?");
+            return;
+        }
+
+        Direzione direzione;
+
+        try {
+            direzione = Direzione.valueOf(param.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            io.mostraMessaggio("Direzione non valida");
             return;
         }
 
         Stanza stanzaCorrente = partita.getStanzaCorrente();
-        Stanza prossimaStanza = stanzaCorrente.getStanzaAdiacente(this.direzione);
+        Stanza prossimaStanza = stanzaCorrente.getStanzaAdiacente(direzione);
 
         if (prossimaStanza == null) {
-            this.io.mostraMessaggio("Direzione inesistente"); 
+            io.mostraMessaggio("Direzione inesistente");
             return;
         }
 
         partita.setStanzaCorrente(prossimaStanza);
+
         int cfu = partita.getGiocatore().getCfu();
         partita.getGiocatore().setCfu(cfu - 1);
-        
-        this.io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione()); 
+
+        io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
     }
 
     @Override
-    public void setParametro(String parametro) {
-        this.direzione = parametro;
-    }
-
-    @Override
-    public String getNome() { return NOME; }
-
-    @Override
-    public String getParametro() { return this.direzione; }
-
-    @Override
-    public void setIO(IO io){this.io=io;}
+    public String getNome() { return "vai"; }
 }
